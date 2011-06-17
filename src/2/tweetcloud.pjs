@@ -1,0 +1,35 @@
+HashMap tags = new HashMap();
+
+void update(tag) {
+    if(!tags.containsKey(tag)) {
+        if(tags.size() < 20)
+            tags.put(tag, 1);
+    }
+    else {
+        current = tags.get(tag);
+        if(current < 5) {
+            tags.put(tag, tags.get(tag) + 1);
+        }
+    }
+}
+
+void draw() {
+    background(0,100,0);
+
+    Iterator i = tags.entrySet().iterator();
+    PFont fontA = loadFont("courier");  
+
+    while (i.hasNext()) {
+        Map.Entry tag = (Map.Entry) i.next();
+        count = tag.getValue();
+        size = 10 + count * 5;
+        textFont(fontA, size);
+        translate(0, size);
+        text(tag.getKey(), 0, 0);
+    }
+}
+
+void setup() {  
+    size(400,400);  
+    frameRate(15);  
+}

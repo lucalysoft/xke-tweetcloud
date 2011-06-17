@@ -1,0 +1,28 @@
+var tags = new Array();
+
+void update(tag) {
+    tags.push(tag);
+    if(tags.length > 30)
+        tags.shift();
+}
+
+void draw() {
+    translate(200,200);
+    background(100,0,0);
+    var idx = 0;
+    for(idx in tags) {
+        label = tags[idx];
+        rotate(0.2);
+        y = 0;
+        x = 50;
+        text(label, x, y);
+    }
+}
+
+
+void setup() {  
+    size(400,400);  
+    PFont fontA = loadFont("ariel");  
+    textFont(fontA, 14);
+    frameRate(15);
+}

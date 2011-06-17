@@ -1,0 +1,27 @@
+var lines = new Array("");
+
+void update(tag) {
+    if(lines[0].length < 30) {
+        lines[0] = lines[0] + " " + tag;
+    } else {
+        lines.unshift(tag);
+    }
+    if(lines.length > 50)
+        lines.pop();
+}
+
+void draw() {
+    background(120);
+    for(idx in lines) {
+        text(lines[idx], 0, idx * 10);
+    }
+}
+
+void setup() {  
+    size(400,400);  
+    background(125);
+    fill(255);  
+    frameRate(15);  
+    PFont fontA = loadFont("courier");  
+    textFont(fontA, 14);    
+}

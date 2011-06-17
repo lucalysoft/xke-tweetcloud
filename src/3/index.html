@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>JQuery tweetcloud</title>
+  <script src="http://www.google.com/jsapi"></script>
+  <script>
+    google.load('jquery','1.3.2');
+  </script>
+  <script>
+    function rand(min, max) {
+      return Math.random() * (max - min) + min;
+    }
+      function addHash(hash) {
+        //Alpha 0.1 white over complete canvas, randomly paste hash
+        var canvas = document.getElementById("tc");
+        var ctx = canvas.getContext("2d");
+        var radius = 50;
+        var x = rand(20, canvas.width - 100);
+        var y = rand(20, canvas.height - 100);
+        ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        ctx.font = "bold 20pt Arial";
+        ctx.fillStyle = "rgb(0, 0, 0)";
+        ctx.fillText(hash, x, y);
+    }
+  
+    $(document).ready(function() {
+      var update = null;
+      
+      if ("WebSocket" in window) {
+        var ws = new WebSocket("ws://10.0.0.81:8088/");
+        ws.onopen = function() { 
+            $('#connectionStatus').text('');
+        };
+        ws.onmessage = function(evt) {
+            if(evt.data) {
+                addHash(evt.data);
+            }
+        };
+        ws.onclose = function() {
+            $('#connectionStatus').text('Connection closed / service down');
+        };
+      }
+      else {
+        $('#connectionStatus').text('Your browser does not support web sockets');
+      }
+    });
+  </script>
+  
+</head>
+<body style="text-align: center">
+<div>
+  <p style="margin: 0; padding: 0; color: red" id="connectionStatus">Not connected yet.</p>
+</div>
+<canvas width="400px" height="400px" id="tc">
+</canvas>
+
+</body>
+</html>
