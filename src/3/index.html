@@ -6,30 +6,63 @@
   <script>
     google.load('jquery','1.3.2');
   </script>
+  <script type="text/javascript" src="http://yui.yahooapis.com/3.0.0/build/yui/yui-min.js"></script>
+  <script type="text/javascript" src="js_cols/base.js"></script>
+  <script src="TagCounter.js"></script>
+  <style>
+  span { padding: 5px; display: inline-block; }
+  .appearing0Times  { color: silver; font-size: 12px; }
+  .appearing1Times  { color: gray; font-size: 12px; }
+  .appearing2Times  { color: black; font-size: 12px; }
+  .appearing3Times  { font-size: 20px; }
+  .appearing4Times  { font-size: 20px; }
+  .appearing5Times  { font-size: 20px; }
+  .appearing6Times  { font-size: 40px; }
+  .appearing7Times  { font-size: 60px; }
+  .appearing8Times  { font-size: 80px; }
+  .appearing9Times  { font-size: 90px; }
+  .appearing10Times { font-size: 100px; }
+  .appearingMostTimes {color: blue; font-size: 100px; }
+  </style>
   <script>
-    function rand(min, max) {
-      return Math.random() * (max - min) + min;
+    tc = new TagCounter(1000);
+    var knownMaximumNumberOfAppearances = 0;
+    function updateTagCloud() {
+        tagContainer = $("#tc");
+        tagContainer.text("");
+        append = true;
+        inRow = 0;
+        rowSize = 1;
+        tc.map(20).forEach(function (value, key) {
+            var numberOfAppearances = value;
+            var tag = key;
+            var relativeSize = "";
+            if(numberOfAppearances > knownMaximumNumberOfAppearances) {
+                relativeSize = "Most";
+                knownMaximumNumberOfAppearances = numberOfAppearances;
+            } else {
+                relativeSize = Math.floor(10 * numberOfAppearances / knownMaximumNumberOfAppearances);
+            }
+            $('<span class="appearing' + relativeSize +  'Times">' + tag + '</span>').appendTo(tagContainer);
+            inRow += 1;
+            if(rowSize == inRow) {
+                $('<br>').appendTo(tagContainer);
+                rowSize += 1;
+                inRow = 0;
+            }
+            
+        });
     }
-      function addHash(hash) {
-        //Alpha 0.1 white over complete canvas, randomly paste hash
-        var canvas = document.getElementById("tc");
-        var ctx = canvas.getContext("2d");
-        var radius = 50;
-        var x = rand(20, canvas.width - 100);
-        var y = rand(20, canvas.height - 100);
-        ctx.fillStyle = "rgba(255, 255, 255, 0.1)";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        
-        ctx.font = "bold 20pt Arial";
-        ctx.fillStyle = "rgb(0, 0, 0)";
-        ctx.fillText(hash, x, y);
+    setInterval(updateTagCloud, 500);
+    function addHash(hash) {
+        tc.add(hash);
     }
   
     $(document).ready(function() {
       var update = null;
       
       if ("WebSocket" in window) {
-        var ws = new WebSocket("ws://10.0.0.81:8088/");
+        var ws = new WebSocket("ws://127.0.0.1:8088/");
         ws.onopen = function() { 
             $('#connectionStatus').text('');
         };
@@ -53,8 +86,8 @@
 <div>
   <p style="margin: 0; padding: 0; color: red" id="connectionStatus">Not connected yet.</p>
 </div>
-<canvas width="400px" height="400px" id="tc">
-</canvas>
+<div id="tc">
+</div>
 
 </body>
 </html>

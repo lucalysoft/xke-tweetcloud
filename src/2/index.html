@@ -14,7 +14,7 @@
       var update = null;
       
       if ("WebSocket" in window) {
-        var ws = new WebSocket("ws://10.0.0.81:8088/");
+        var ws = new WebSocket("ws://10.0.0.115:8088/");
         ws.onopen = function() { 
             $('#connectionStatus').text('');
         };

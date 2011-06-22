@@ -19,6 +19,9 @@ def sampleFilename(idx):
 
 class StreamAPIServer(BaseHTTPRequestHandler):
 
+    def do_POST(self):
+        print self.request.body
+
     def do_GET(self):
         self.send_response(200)
         self.send_header ('Content-Type', 'application/json')
@@ -41,7 +44,7 @@ def main():
 
     try:
         logging.info('Starting server on port %i' % PORT)
-        server = HTTPServer(('', PORT), StreamAPIServer)
+        server = HTTPServer(('0.0.0.0', PORT), StreamAPIServer)
         server.serve_forever()
     except KeyboardInterrupt:
         print '^C received, shutting down server'

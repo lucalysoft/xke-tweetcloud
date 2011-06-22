@@ -14,9 +14,8 @@ Twitter stream -> websockets -> client
 Build
 =====
 
- 1. Edit src/main/main.hs to set the correct username and password or
-    optionally use the samplestream/serve.py script for local test
-    streaming
+ 1. Edit src/main/main.hs to set the correct username, password and url.
+    For the local test server, the url should be something like: http://localhost:8080/
  2. cabal configure
  3. cabal build
  4. run dist/build/tweetcloud/tweetcloud
